@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
@@ -13,35 +13,26 @@ import {
   TextField,
   InputAdornment,
   Tooltip,
-  Chip,
-  useTheme,
   useMediaQuery,
   Alert,
   Snackbar,
+  useTheme,
 } from "@mui/material";
-
-// Icons
+import UnplugWell from "../../assets/unplugwellTwo.png";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import SendIcon from "@mui/icons-material/Send";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
 import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 import GavelIcon from "@mui/icons-material/Gavel";
 import CookieIcon from "@mui/icons-material/Cookie";
 import InfoIcon from "@mui/icons-material/Info";
 
-import { motion } from "framer-motion";
-import { fetchCategories } from "../../services/api";
-import { Category } from "../../types";
-
 const Footer = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [email, setEmail] = useState("");
   const [showLegalLinks, setShowLegalLinks] = useState(false);
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
@@ -50,29 +41,15 @@ const Footer = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const isTablet = useMediaQuery(theme.breakpoints.down("lg"));
-
-  useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const categoriesData = await fetchCategories();
-        // Get only a few categories for the footer
-        setCategories(categoriesData.slice(0, 5));
-      } catch (error) {
-        console.error("Failed to load categories:", error);
-      }
-    };
-
-    loadCategories();
-  }, []);
+  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const currentYear = new Date().getFullYear();
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -87,7 +64,6 @@ const Footer = () => {
       return;
     }
 
-    // Here you would typically send the email to your backend
     console.log(`Subscribing email: ${email}`);
     setEmail("");
     setSubscribeSuccess(true);
@@ -106,23 +82,18 @@ const Footer = () => {
   const socialLinks = [
     {
       icon: <FacebookIcon />,
-      url: "https://facebook.com/unplugwell",
+      url: "https://www.facebook.com/people/Unplugwell-DigitalDetox/61570893369070/",
       label: "Facebook",
     },
     {
       icon: <TwitterIcon />,
-      url: "https://twitter.com/unplugwell",
+      url: "https://x.com/unplugwell",
       label: "Twitter",
     },
     {
       icon: <InstagramIcon />,
-      url: "https://instagram.com/unplugwell",
+      url: "https://www.instagram.com/unplugwell/",
       label: "Instagram",
-    },
-    {
-      icon: <LinkedInIcon />,
-      url: "https://linkedin.com/company/unplugwell",
-      label: "LinkedIn",
     },
   ];
 
@@ -161,18 +132,14 @@ const Footer = () => {
       component="footer"
       sx={{
         position: "relative",
-        overflow: "hidden",
-        background:
-          theme.palette.mode === "dark"
-            ? "linear-gradient(135deg, #1e293b 0%, #0f172a 100%)"
-            : "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
+        background: "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
         color: "#fff",
         mt: "auto",
-        pt: { xs: 6, md: 8 },
-        pb: { xs: 4, md: 6 },
+        pt: { xs: 4, sm: 6, md: 8 },
+        pb: { xs: 3, sm: 4, md: 6 },
       }}
     >
-      {/* Background decorative elements */}
+      {/* Background pattern */}
       <Box
         sx={{
           position: "absolute",
@@ -187,60 +154,11 @@ const Footer = () => {
         }}
       />
 
-      {/* Decorative shapes */}
-      <Box
-        component={motion.div}
-        animate={{
-          y: [0, -15, 0],
-          transition: { duration: 10, repeat: Infinity, ease: "easeInOut" },
-        }}
-        sx={{
-          position: "absolute",
-          top: "10%",
-          right: "5%",
-          width: "250px",
-          height: "250px",
-          borderRadius: "40% 60% 70% 30% / 40% 50% 50% 60%",
-          background:
-            "linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-          filter: "blur(40px)",
-        }}
-      />
-
-      <Box
-        component={motion.div}
-        animate={{
-          y: [0, 15, 0],
-          transition: {
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1,
-          },
-        }}
-        sx={{
-          position: "absolute",
-          bottom: "10%",
-          left: "5%",
-          width: "200px",
-          height: "200px",
-          borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%",
-          background:
-            "linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)",
-          zIndex: 0,
-          display: { xs: "none", md: "block" },
-          filter: "blur(30px)",
-        }}
-      />
-
-      {/* Main content */}
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        <Grid container spacing={4}>
-          {/* About section */}
-          <Grid item xs={12} sm={6} md={4} lg={3}>
-            <Box>
+        <Grid container spacing={{ xs: 3, md: 4 }}>
+          {/* Brand section */}
+          <Grid item xs={12} sm={6} md={4}>
+            <Box sx={{ mb: { xs: 2, sm: 0 } }}>
               <Typography
                 variant="h5"
                 component="div"
@@ -252,7 +170,16 @@ const Footer = () => {
                   gap: 1,
                 }}
               >
-                <NightsStayIcon fontSize="large" />
+                <Box
+                  component="img"
+                  src={UnplugWell}
+                  alt="UnplugWell Logo"
+                  sx={{
+                    width: { xs: 30, md: 35 },
+                    height: { xs: 30, md: 35 },
+                    mr: 1,
+                  }}
+                />
                 UnplugWell
               </Typography>
 
@@ -301,7 +228,14 @@ const Footer = () => {
 
           {/* Quick Links section */}
           <Grid item xs={12} sm={6} md={2}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                mb: 2,
+                fontWeight: 600,
+                fontSize: { xs: "1.1rem", sm: "1.25rem" },
+              }}
+            >
               Quick Links
             </Typography>
 
@@ -349,62 +283,22 @@ const Footer = () => {
             </Stack>
           </Grid>
 
-          {/* Categories section */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 600 }}>
-              Categories
-            </Typography>
-
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {categories.map((category) => (
-                <Chip
-                  key={category.id}
-                  label={category.name}
-                  component={RouterLink}
-                  to={`/categories/${category.slug}`}
-                  clickable
-                  sx={{
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    color: "white",
-                    mb: 1,
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    "&:hover": {
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                    },
-                  }}
-                />
-              ))}
-            </Box>
-
-            <Button
-              component={RouterLink}
-              to="/categories"
-              variant="text"
-              color="inherit"
-              endIcon={<ArrowForwardIcon />}
+          {/* Newsletter section */}
+          <Grid item xs={12} sm={12} md={6}>
+            <Typography
+              variant="h6"
               sx={{
-                mt: 2,
-                opacity: 0.9,
-                fontSize: "0.875rem",
-                "&:hover": {
-                  opacity: 1,
-                  backgroundColor: "rgba(255, 255, 255, 0.1)",
-                },
+                mb: 2,
+                fontWeight: 600,
+                fontSize: { xs: "1.1rem", sm: "1.25rem" },
               }}
             >
-              View all categories
-            </Button>
-          </Grid>
-
-          {/* Newsletter section */}
-          <Grid item xs={12} sm={6} md={3} lg={4}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
               Subscribe to Our Newsletter
             </Typography>
 
             <Typography
               variant="body2"
-              sx={{ mb: 3, opacity: 0.9, lineHeight: 1.7 }}
+              sx={{ mb: 2, opacity: 0.9, lineHeight: 1.7 }}
             >
               Join our newsletter to receive the latest updates and tips on
               digital wellbeing.
@@ -415,9 +309,10 @@ const Footer = () => {
               onSubmit={handleSubscribe}
               sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: { xs: "column", sm: "row" },
                 gap: 2,
                 mb: 3,
+                width: "100%",
               }}
             >
               <TextField
@@ -429,6 +324,7 @@ const Footer = () => {
                 sx={{
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
                   borderRadius: 1,
+                  flex: { xs: "1", sm: "2" },
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": {
                       borderColor: "rgba(255, 255, 255, 0.3)",
@@ -461,46 +357,54 @@ const Footer = () => {
                   backgroundColor: "white",
                   color: "primary.main",
                   fontWeight: 600,
-                  py: 1.2,
+                  py: { xs: 1, sm: 1.2 },
+                  flex: { xs: "1", sm: "1" },
+                  whiteSpace: "nowrap",
                   "&:hover": {
                     backgroundColor: "rgba(255, 255, 255, 0.9)",
                   },
                 }}
               >
-                Subscribe Now
+                {isSmall ? "Subscribe" : "Subscribe Now"}
               </Button>
-
-              <Typography
-                variant="caption"
-                sx={{ opacity: 0.8, textAlign: "center" }}
-              >
-                By subscribing, you agree to our Privacy Policy and consent to
-                receive updates from our company.
-              </Typography>
             </Box>
+
+            <Typography
+              variant="caption"
+              sx={{
+                opacity: 0.8,
+                display: "block",
+                textAlign: { xs: "center", sm: "left" },
+              }}
+            >
+              By subscribing, you agree to our Privacy Policy and consent to
+              receive updates from our company.
+            </Typography>
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: 4, borderColor: "rgba(255, 255, 255, 0.2)" }} />
+        <Divider
+          sx={{ my: { xs: 3, md: 4 }, borderColor: "rgba(255, 255, 255, 0.2)" }}
+        />
 
-        {/* Legal section */}
+        {/* Footer bottom section */}
         <Box
           sx={{
             display: "flex",
-            flexDirection: isMobile ? "column" : "row",
+            flexDirection: { xs: "column", md: "row" },
             justifyContent: "space-between",
-            alignItems: isMobile ? "center" : "flex-start",
-            textAlign: isMobile ? "center" : "left",
+            alignItems: { xs: "center", md: "center" },
+            textAlign: { xs: "center", md: "left" },
           }}
         >
           <Typography
             variant="body2"
-            sx={{ mb: isMobile ? 2 : 0, opacity: 0.8 }}
+            sx={{ mb: { xs: 2, md: 0 }, opacity: 0.8 }}
           >
             © {currentYear} UnplugWell. All rights reserved.
           </Typography>
 
-          <Box sx={{ mb: isMobile ? 2 : 0 }}>
+          <Box>
             <Button
               onClick={toggleLegalLinks}
               color="inherit"
@@ -518,6 +422,7 @@ const Footer = () => {
                   opacity: 1,
                 },
                 display: { xs: "flex", md: "none" },
+                mb: 1,
               }}
             >
               Legal
@@ -528,6 +433,8 @@ const Footer = () => {
               spacing={{ xs: 1, md: 3 }}
               sx={{
                 display: { xs: showLegalLinks ? "flex" : "none", md: "flex" },
+                mb: { xs: 2, md: 0 },
+                justifyContent: "center",
               }}
             >
               {legalLinks.map((link, index) => (
@@ -541,6 +448,7 @@ const Footer = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: { xs: "center", md: "flex-start" },
                     gap: 0.5,
                     opacity: 0.8,
                     transition: "all 0.2s ease",
@@ -557,16 +465,12 @@ const Footer = () => {
           </Box>
         </Box>
 
-        {/* Scroll to top button, visible only when scrolling down */}
+        {/* Scroll to top button */}
         <Box
-          component={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
           sx={{
             position: "absolute",
-            bottom: 16,
-            right: 16,
+            bottom: { xs: 8, md: 16 },
+            right: { xs: 8, md: 16 },
             zIndex: 2,
           }}
         >
@@ -577,7 +481,6 @@ const Footer = () => {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               sx={{
                 backgroundColor: "rgba(255, 255, 255, 0.1)",
-                backdropFilter: "blur(4px)",
                 "&:hover": {
                   backgroundColor: "rgba(255, 255, 255, 0.2)",
                   transform: "translateY(-3px)",
@@ -591,7 +494,7 @@ const Footer = () => {
         </Box>
       </Container>
 
-      {/* Success and error notifications */}
+      {/* Notifications */}
       <Snackbar
         open={subscribeSuccess}
         autoHideDuration={6000}

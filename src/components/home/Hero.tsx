@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Box,
   Typography,
@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 const Hero = () => {
   const theme = useTheme();
@@ -22,17 +22,6 @@ const Hero = () => {
   const y1 = useTransform(scrollY, [0, 500], [0, 150]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-
-  // For animated gradient background
-  const [rotation, setRotation] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRotation((prev) => (prev + 1) % 360);
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const scrollToContent = () => {
     const contentElement = document.getElementById("main-content");
@@ -50,17 +39,15 @@ const Hero = () => {
         width: "100%",
         overflow: "hidden",
         color: "white",
-        mt: -25, // This negative margin removes the gap between navbar and hero
-        // Increase top padding to account for navbar
-        pt: { xs: -300, md: -15, lg: -20 },
+        mt: 0,
+        pt: { xs: 8, md: 8, lg: 8 },
         pb: { xs: 10, md: 0 },
       }}
     >
-      {/* Animated background with gradient and noise */}
       <Box
         sx={{
           position: "absolute",
-          top: 100,
+          top: 20,
           left: 0,
           right: 0,
           bottom: 0,
@@ -68,33 +55,6 @@ const Hero = () => {
           zIndex: -2,
         }}
       />
-
-      <Box
-        component={motion.div}
-        animate={{
-          rotate: [0, 360],
-          transition: { duration: 60, repeat: Infinity, ease: "linear" },
-        }}
-        style={{
-          position: "absolute",
-          top: "-50%",
-          left: "-50%",
-          width: "200%",
-          height: "200%",
-          background: `conic-gradient(
-            from ${rotation}deg,
-            rgba(99, 102, 241, 0.7),
-            rgba(139, 92, 246, 0.7),
-            rgba(236, 72, 153, 0.7),
-            rgba(139, 92, 246, 0.7),
-            rgba(99, 102, 241, 0.7)
-          )`,
-          opacity: 0.5,
-          zIndex: -1,
-        }}
-      />
-
-      {/* Noise overlay */}
       <Box
         sx={{
           position: "absolute",
@@ -110,8 +70,6 @@ const Hero = () => {
           mixBlendMode: "overlay",
         }}
       />
-
-      {/* Floating glass shapes */}
       <Box
         component={motion.div}
         initial={{ x: -100, y: -100, opacity: 0 }}
@@ -133,7 +91,6 @@ const Hero = () => {
           display: { xs: "none", md: "block" },
         }}
       />
-
       <Box
         component={motion.div}
         initial={{ x: 100, y: 100, opacity: 0 }}
@@ -155,8 +112,6 @@ const Hero = () => {
           display: { xs: "none", md: "block" },
         }}
       />
-
-      {/* Content */}
       <Container
         maxWidth="lg"
         sx={{ height: "100%", position: "relative", zIndex: 1 }}
@@ -168,7 +123,7 @@ const Hero = () => {
             alignItems: "center",
             justifyContent: "space-between",
             height: "100%",
-            pt: { xs: 16, md: 16 }, // Increased top padding to account for navbar
+            pt: { xs: 10, md: 10 },
           }}
         >
           <Box
@@ -212,7 +167,6 @@ const Hero = () => {
                 </Typography>
               </Box>
             </motion.div>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -242,7 +196,6 @@ const Hero = () => {
                 Reclaim Your Digital Balance
               </Typography>
             </motion.div>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -262,7 +215,6 @@ const Hero = () => {
                 well-being.
               </Typography>
             </motion.div>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -301,7 +253,6 @@ const Hero = () => {
                 >
                   Start Your Journey
                 </Button>
-
                 <Button
                   component={RouterLink}
                   to="/about"
@@ -327,7 +278,6 @@ const Hero = () => {
               </Box>
             </motion.div>
           </Box>
-
           {!isSmall && (
             <Box
               component={motion.div}
@@ -343,7 +293,6 @@ const Hero = () => {
                 mt: { xs: 6, md: 0 },
               }}
             >
-              {/* Glass card effect for the main image */}
               <Paper
                 elevation={0}
                 sx={{
@@ -377,8 +326,6 @@ const Hero = () => {
                   }}
                 />
               </Paper>
-
-              {/* Decorative elements */}
               <Box
                 component={motion.div}
                 initial={{ opacity: 0, y: 30 }}
@@ -396,7 +343,6 @@ const Hero = () => {
                   zIndex: -1,
                 }}
               />
-
               <Box
                 component={motion.div}
                 initial={{ opacity: 0, y: -30 }}
@@ -418,8 +364,6 @@ const Hero = () => {
           )}
         </Box>
       </Container>
-
-      {/* Scroll indicator */}
       <Box
         component={motion.div}
         style={{ opacity }}

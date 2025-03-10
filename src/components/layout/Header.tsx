@@ -16,19 +16,18 @@ import {
 import { motion } from "framer-motion";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
+import UnplugWell from "../../assets/unplugwellOne.png";
 
 const navItems = [
   { name: "Home", path: "/" },
   { name: "Blog", path: "/blog" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
-  { name: "Categories", path: "/categories" },
 ];
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const theme = useTheme();
   const location = useLocation();
@@ -93,45 +92,35 @@ const Header = () => {
         <Box
           component="div"
           sx={{
-            fontWeight: 800,
-            fontSize: { xs: "1.4rem", md: "1.6rem" },
-            letterSpacing: "-0.03em",
-            background: "linear-gradient(90deg, #8b5cf6, #d8b4fe)",
-            backgroundClip: "text",
-            WebkitBackgroundClip: "text",
-            color: "transparent",
-            WebkitTextFillColor: "transparent",
             display: "flex",
             alignItems: "center",
           }}
         >
           <Box
-            component="span"
+            component="img"
+            src={UnplugWell}
+            alt="UnplugWell Logo"
             sx={{
-              display: "inline-block",
-              mr: 0.5,
-              p: 0.5,
-              borderRadius: "50%",
-              background: "linear-gradient(45deg, #8b5cf6, #d8b4fe)",
               width: { xs: 30, md: 35 },
               height: { xs: 30, md: 35 },
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)",
+              mr: 1,
+            }}
+          />
+          <Box
+            component="span"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "1.4rem", md: "1.6rem" },
+              letterSpacing: "-0.03em",
+              background: "linear-gradient(90deg, #8b5cf6, #d8b4fe)",
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              color: "transparent",
+              WebkitTextFillColor: "transparent",
             }}
           >
-            <Box
-              component="span"
-              sx={{
-                fontSize: { xs: "0.9rem", md: "1rem" },
-                color: "#fff",
-                fontWeight: 900,
-              }}
-            >
-              U
-            </Box>
+            UnplugWell
           </Box>
-          UnplugWell
         </Box>
       </motion.div>
     </Box>
@@ -196,28 +185,6 @@ const Header = () => {
               borderRadius: "1px",
               bgcolor: "primary.main",
               boxShadow: "0 0 8px rgba(139, 92, 246, 0.5)",
-            }}
-          />
-        )}
-
-        {isDropdown && (
-          <Box
-            component="span"
-            sx={{
-              display: "inline-block",
-              width: 0,
-              height: 0,
-              ml: 0.5,
-              borderLeft: "4px solid transparent",
-              borderRight: "4px solid transparent",
-              borderTop: `4px solid ${
-                active ? theme.palette.primary.main : theme.palette.text.primary
-              }`,
-              transition: "transform 0.2s",
-              transform:
-                hoveredItem === "categories"
-                  ? "rotate(180deg)"
-                  : "rotate(0deg)",
             }}
           />
         )}
