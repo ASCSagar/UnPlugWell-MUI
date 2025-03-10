@@ -15,7 +15,6 @@ import Seo from "../components/layout/Seo";
 import Hero from "../components/home/Hero";
 import CookieConsent from "../components/common/CookieConsent";
 import FeaturedContent from "../components/home/FeaturedContent";
-import SubscriptionSection from "../components/home/SubscriptionSection";
 import UnplugIcon from "@mui/icons-material/PowerSettingsNew";
 import MindfulnessIcon from "@mui/icons-material/SelfImprovement";
 import BalanceIcon from "@mui/icons-material/Balance";
@@ -61,64 +60,7 @@ const Home = () => {
         description="Discover the benefits of digital detox with UnplugWell. Explore expert tips, resources, and strategies to disconnect, recharge, and find balance in a tech-driven world."
         ogType="website"
       />
-      <Box
-        sx={{
-          position: "relative",
-          pt: { xs: 8, md: 8 },
-          background:
-            "linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(168, 85, 247, 0.9) 100%)",
-          overflow: "hidden",
-        }}
-      >
-        <Box
-          component={motion.div}
-          animate={{
-            scale: [1, 1.05, 1],
-            rotate: [0, 1, 0],
-            x: [0, 5, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-          sx={{
-            position: "absolute",
-            top: "10%",
-            left: "-5%",
-            width: { xs: 250, md: 400 },
-            height: { xs: 250, md: 400 },
-            borderRadius: "63% 37% 54% 46% / 55% 48% 52% 45%",
-            background: "rgba(216, 180, 254, 0.2)",
-            filter: "blur(40px)",
-            zIndex: 0,
-          }}
-        />
-        <Box
-          component={motion.div}
-          animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, -1, 0],
-            y: [0, 10, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            repeatType: "reverse",
-            delay: 5,
-          }}
-          sx={{
-            position: "absolute",
-            bottom: "5%",
-            right: "-5%",
-            width: { xs: 200, md: 350 },
-            height: { xs: 200, md: 350 },
-            borderRadius: "46% 54% 63% 37% / 45% 52% 48% 55%",
-            background: "rgba(192, 132, 252, 0.15)",
-            filter: "blur(40px)",
-            zIndex: 0,
-          }}
-        />
+      <Box sx={{ position: "relative", overflow: "hidden" }}>
         <Box sx={{ position: "relative", zIndex: 1 }}>
           <Hero />
         </Box>
@@ -479,7 +421,6 @@ const Home = () => {
           <FeaturedContent isMobile={isMobile} />
         </Container>
       </Box>
-      <SubscriptionSection />
       <CookieConsent />
     </Layout>
   );

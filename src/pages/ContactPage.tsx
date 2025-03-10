@@ -140,29 +140,26 @@ const ContactPage = () => {
               <Box sx={{ display: "flex", alignItems: "center", mt: 4, mb: 2 }}>
                 <EmailIcon color="primary" sx={{ mr: 2 }} />
                 <Typography variant="body1">
-                  <strong>Email:</strong> hello@unplugwell.com
+                  <strong>Email : </strong>support@unplugwell.com
                 </Typography>
               </Box>
 
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <LocationOnIcon color="primary" sx={{ mr: 2 }} />
                 <Typography variant="body1">
-                  <strong>Location:</strong> Portland, Oregon
+                  <strong>Location : </strong> Alkapuri, Vadodara
                 </Typography>
               </Box>
 
-              <Box
-                component="img"
-                src="https://source.unsplash.com/random/600x400/?office,cozy"
-                alt="UnplugWell office"
-                sx={{
-                  width: "100%",
-                  height: 200,
-                  objectFit: "cover",
-                  borderRadius: 2,
-                  mt: 4,
-                }}
-              />
+              <Box sx={{ py: 2 }}>
+                <iframe
+                  title="Office Location"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.169202432397!2d73.16878167596472!3d22.309439742562773!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395fc5873e594259%3A0xda3dc91c20f4beec!2sAnant%20Soft%20Computing!5e0!3m2!1sen!2sin!4v1731308281495!5m2!1sen!2sin"
+                  width="100%"
+                  height="400"
+                  loading="lazy"
+                />
+              </Box>
             </Paper>
           </Grid>
 

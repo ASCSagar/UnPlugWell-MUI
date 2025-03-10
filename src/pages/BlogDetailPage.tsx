@@ -459,8 +459,8 @@ const BlogDetailPage = () => {
     <Layout disableContainer>
       {post && (
         <Seo
-          title={post.meta_title || post.title}
-          description={post.meta_description || post.excerpt}
+          title={post.meta_title}
+          description={post.meta_description}
           canonicalUrl={`/blog/${post.slug}`}
           ogImage={post.featured_image}
           ogType="article"
