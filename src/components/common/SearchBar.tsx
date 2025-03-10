@@ -1,16 +1,9 @@
-// src/components/common/SearchBar.tsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Paper,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { TextField, InputAdornment, IconButton, Paper } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
+import { motion } from "framer-motion";
 
 interface SearchBarProps {
   onClose?: () => void;
@@ -20,12 +13,12 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({
   onClose,
-  placeholder = 'Search for articles, topics, and more...',
+  placeholder = "Search for articles, topics, and more...",
   fullWidth = true,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const navigate = useNavigate();
-  
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -33,7 +26,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       if (onClose) onClose();
     }
   };
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -45,11 +38,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
         onSubmit={handleSearch}
         elevation={0}
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          width: fullWidth ? '100%' : 'auto',
-          border: '1px solid',
-          borderColor: 'divider',
+          display: "flex",
+          alignItems: "center",
+          width: fullWidth ? "100%" : "auto",
+          border: "1px solid",
+          borderColor: "divider",
           borderRadius: 2,
           p: 0.5,
         }}
@@ -71,18 +64,18 @@ const SearchBar: React.FC<SearchBarProps> = ({
             sx: { px: 1 },
           }}
         />
-        
+
         {query && (
           <IconButton
             size="small"
             aria-label="clear search"
-            onClick={() => setQuery('')}
+            onClick={() => setQuery("")}
             edge="end"
           >
             <CloseIcon fontSize="small" />
           </IconButton>
         )}
-        
+
         {onClose && (
           <IconButton
             color="primary"
