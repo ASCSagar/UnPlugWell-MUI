@@ -1,20 +1,23 @@
-// scripts/generate-sitemap.js
-import fs from 'fs';
-import axios from 'axios';
+import fs from "fs";
+import axios from "axios";
 
-const API_URL = 'https://unplugwell.com/blog/api';
-const SITE_URL = 'https://unplugwell.com';
+const API_URL = "https://unplugwell.com/blog/api";
+const SITE_URL = "https://unplugwell.com";
 
 async function generateSitemap() {
   try {
-    // Fetch all posts
-    const postsResponse = await axios.get(`${API_URL}/posts/?site_domain=unplugwell.com&page_size=100`);
+    // Fetch posts from the API
+    const postsResponse = await axios.get(
+      `${API_URL}/posts/?site_domain=unplugwell.com&page_size=100`
+    );
     const posts = postsResponse.data.results;
-    
-    // Fetch all categories
-    const categoriesResponse = await axios.get(`${API_URL}/get-categories/?site=unplugwell.com`);
+
+    // Fetch categories from the API
+    const categoriesResponse = await axios.get(
+      `${API_URL}/get-categories/?site=unplugwell.com`
+    );
     const categories = categoriesResponse.data.results;
-    
+
     // Start building the sitemap
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -44,10 +47,10 @@ async function generateSitemap() {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
   <!-- Categories -->`;
-  
-    // Add categories
+
+    // Add categories to the sitemap
     for (const category of categories) {
       sitemap += `
   <url>
@@ -56,28 +59,31 @@ async function generateSitemap() {
     <priority>0.7</priority>
   </url>`;
     }
-    
-    // Add posts
+
+    // Add posts to the sitemap
     for (const post of posts) {
       sitemap += `
   <url>
     <loc>${SITE_URL}/blog/${post.slug}</loc>
-    <lastmod>${new Date(post.published_at).toISOString().split('T')[0]}</lastmod>
+    <lastmod>${
+      new Date(post.published_at).toISOString().split("T")[0]
+    }</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>`;
     }
-    
-    // Close sitemap
+
+    // Close the sitemap
     sitemap += `
 </urlset>`;
-    
-    // Write to file
-    fs.writeFileSync('./public/sitemap.xml', sitemap);
-    console.log('Sitemap generated successfully!');
+
+    // Write the sitemap to a file
+    fs.writeFileSync("./public/sitemap.xml", sitemap);
+    console.log("Sitemap generated successfully!");
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error("Error generating sitemap:", error);
   }
 }
 
+// Execute the function
 generateSitemap();

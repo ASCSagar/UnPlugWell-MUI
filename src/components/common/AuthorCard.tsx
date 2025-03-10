@@ -1,4 +1,3 @@
-// src/components/common/AuthorCard.tsx
 import React from 'react';
 import { Box, Typography, Avatar, Paper, Divider } from '@mui/material';
 import { motion } from 'framer-motion';
@@ -49,12 +48,12 @@ interface AuthorCardProps {
   minimal?: boolean;
 }
 
-const AuthorCard: React.FC<AuthorCardProps> = ({ 
-  author, 
-  minimal = false 
+const AuthorCard: React.FC<AuthorCardProps> = ({
+  author,
+  minimal = false
 }) => {
   const authorInfo = authorDetails[author.full_name] || defaultAuthorDetails;
-  
+
   if (minimal) {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -69,7 +68,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
       </Box>
     );
   }
-  
+
   return (
     <Paper
       component={motion.div}
@@ -88,7 +87,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
       <Typography variant="h6" component="h3" gutterBottom>
         About the Author
       </Typography>
-      
+
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
         <Avatar
           src={authorInfo.avatar}
@@ -127,9 +126,9 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
           </Box>
         </Box>
       </Box>
-      
+
       <Divider sx={{ my: 2 }} />
-      
+
       <Typography variant="body2" color="text.secondary">
         {authorInfo.bio}
       </Typography>

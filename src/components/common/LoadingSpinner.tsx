@@ -1,6 +1,5 @@
-// src/components/common/LoadingSpinner.tsx
-import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import React from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 interface LoadingSpinnerProps {
   message?: string;
@@ -9,30 +8,30 @@ interface LoadingSpinnerProps {
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  message = 'Loading...',
+  message = "Loading...",
   fullPage = false,
   size = 40,
 }) => {
   const content = (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
         p: 3,
       }}
     >
       <CircularProgress
         size={size}
         thickness={4}
-        sx={{ color: 'primary.main' }}
+        sx={{ color: "primary.main" }}
       />
       {message && (
         <Typography
           variant="body2"
           color="text.secondary"
-          sx={{ mt: 2, textAlign: 'center' }}
+          sx={{ mt: 2, textAlign: "center" }}
         >
           {message}
         </Typography>
@@ -44,10 +43,10 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     return (
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: 'calc(100vh - 200px)', // Account for header and footer
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "calc(100vh - 200px)", // Account for header and footer
         }}
       >
         {content}
