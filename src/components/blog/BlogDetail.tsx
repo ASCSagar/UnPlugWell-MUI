@@ -22,6 +22,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import RelatedBlog from "./RelatedBlog";
 
 interface BlogDetailProps {
   post: Blogs;
@@ -52,31 +53,14 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
     return <LoadingSpinner fullPage message="Loading article..." />;
   }
 
-  if (!post) {
-    return (
-      <Box sx={{ textAlign: "center", py: 10 }}>
-        <Typography variant="h4" gutterBottom>
-          Article Not Found
-        </Typography>
-        <Typography variant="body1">
-          The article you're looking for doesn't exist or has been removed.
-        </Typography>
-      </Box>
-    );
-  }
-  const shareUrl = `https://unplugwell.com/blog/${post.slug}`;
   return (
     <Box
-      component="main"
       sx={{
-        pt: 12,
-        minHeight: "100vh",
         background:
           "linear-gradient(to right, rgba(238, 242, 255, 0.3), rgba(254, 242, 254, 0.3))",
       }}
     >
       <Container
-        maxWidth="lg"
         sx={{
           px: { xs: 2, md: 3, lg: 4 },
           py: 6,
@@ -400,10 +384,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
                         "&:hover": { bgcolor: "rgba(29, 161, 242, 0.2)" },
                       }}
                       onClick={() =>
-                        window.open(
-                          "https://twitter.com/intent/tweet?url=" + shareUrl,
-                          "_blank"
-                        )
+                        window.open("https://x.com/unplugwell", "_blank")
                       }
                     >
                       <TwitterIcon sx={{ mb: 0.5 }} />
@@ -424,8 +405,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
                       }}
                       onClick={() =>
                         window.open(
-                          "https://www.facebook.com/sharer/sharer.php?u=" +
-                            shareUrl,
+                          "https://www.facebook.com/people/Unplugwell-DigitalDetox/61570893369070/",
                           "_blank"
                         )
                       }
@@ -447,7 +427,10 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
                         "&:hover": { bgcolor: "rgba(10, 102, 194, 0.2)" },
                       }}
                       onClick={() =>
-                        window.open("https://www.instagram.com/", "_blank")
+                        window.open(
+                          "https://www.instagram.com/unplugwell/",
+                          "_blank"
+                        )
                       }
                     >
                       <InstagramIcon sx={{ mb: 0.5 }} />
@@ -569,7 +552,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
         </Grid>
       </Container>
       {isVisible && (
-        <Box sx={{ position: "fixed", bottom: 4, left: 4, zIndex: 50 }}>
+        <Box sx={{ position: "fixed", bottom: 20, left: 20, zIndex: 50 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -600,16 +583,15 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6 }}
       >
-        <Box sx={{ mt: 8, pb: 8 }}>
-          <Container maxWidth="lg">
+        <Box>
+          <Container>
             <Typography
               variant="h4"
               component="h2"
               fontWeight={700}
               gutterBottom
               sx={{
-                textAlign: "center",
-                mb: 5,
+                textAlign: "start",
                 background: "linear-gradient(to right, #4f46e5, #e11d48)",
                 backgroundClip: "text",
                 color: "transparent",
@@ -619,9 +601,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
             >
               Related Articles
             </Typography>
-            <Box sx={{ textAlign: "center", color: "text.secondary" }}>
-              <Typography>Related articles will appear here...</Typography>
-            </Box>
+            <RelatedBlog category={post.category.slug} />
           </Container>
         </Box>
       </motion.div>

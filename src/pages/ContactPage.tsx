@@ -12,6 +12,10 @@ import {
   Paper,
   Snackbar,
   Alert,
+  Divider,
+  alpha,
+  Container,
+  useTheme,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import EmailIcon from "@mui/icons-material/Email";
@@ -30,7 +34,8 @@ const ContactPage = () => {
     email: "",
     message: "",
   });
-
+  const theme = useTheme();
+  const MotionPaper = motion(Paper);
   const [loading, setLoading] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -124,17 +129,64 @@ const ContactPage = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Box sx={{ textAlign: "center", mb: 6 }}>
-          <Typography variant="h3" component="h1" gutterBottom fontWeight={700}>
-            Get In Touch
-          </Typography>
-          <Typography
-            variant="h6"
-            color="text.secondary"
-            sx={{ maxWidth: 700, mx: "auto" }}
-          >
-            Have questions or suggestions? We'd love to hear from you.
-          </Typography>
+        <Box
+          sx={{
+            pt: 8,
+            bgcolor: alpha(theme.palette.primary.light, 0.05),
+          }}
+        >
+          <Container>
+            <MotionPaper
+              elevation={2}
+              sx={{
+                p: { xs: 3, md: 5 },
+                mb: 5,
+                borderRadius: 3,
+                background: `linear-gradient(135deg, ${alpha(
+                  theme.palette.primary.light,
+                  0.2
+                )}, ${alpha(theme.palette.background.paper, 0.9)})`,
+                position: "relative",
+                overflow: "hidden",
+              }}
+              initial="hidden"
+              animate="visible"
+            >
+              <Box>
+                <Typography
+                  variant="h3"
+                  component="h1"
+                  align="center"
+                  fontWeight={700}
+                  sx={{
+                    background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                    backgroundClip: "text",
+                    WebkitBackgroundClip: "text",
+                    color: "transparent",
+                    WebkitTextFillColor: "transparent",
+                    mb: 2,
+                  }}
+                >
+                  Get In Touch
+                </Typography>
+
+                <Divider
+                  sx={{
+                    width: "100px",
+                    mx: "auto",
+                    my: 3,
+                    borderColor: alpha(theme.palette.primary.main, 0.3),
+                  }}
+                />
+                <Typography
+                  align="center"
+                  sx={{ maxWidth: "700px", mx: "auto" }}
+                >
+                  Have questions or suggestions? We'd love to hear from you.
+                </Typography>
+              </Box>
+            </MotionPaper>
+          </Container>
         </Box>
 
         <Grid container spacing={4}>
