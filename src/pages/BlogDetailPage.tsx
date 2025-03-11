@@ -113,7 +113,9 @@ const BlogDetailPage = () => {
       setLoading(true);
       try {
         // Fetch post data from the API
-        const response = await axios.get(`https://unplugwell.com/blog/api/post/${slug}/`);
+        const response = await axios.get(
+          `https://unplugwell.com/blog/api/post/${slug}/`
+        );
         setPost(response.data);
 
         // Wait for the DOM to update after the post is loaded
@@ -434,39 +436,6 @@ const BlogDetailPage = () => {
     }
   };
 
-  // Generate structured data for SEO
-  const generateStructuredData = () => {
-    if (!post) return {};
-
-    const articleData = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: post.title,
-      description: post.excerpt,
-      image: post.featured_image,
-      datePublished: post.published_at,
-      dateModified: post.published_at,
-      author: {
-        "@type": "Person",
-        name: post.author.full_name,
-      },
-      publisher: {
-        "@type": "Organization",
-        name: "UnplugWell",
-        logo: {
-          "@type": "ImageObject",
-          url: "https://unplugwell.com/logo.png",
-        },
-      },
-      mainEntityOfPage: {
-        "@type": "WebPage",
-        "@id": `https://unplugwell.com/blog/${post.slug}`,
-      },
-    };
-
-    return articleData;
-  };
-
   return (
     <Layout disableContainer>
       {post && (
@@ -476,7 +445,6 @@ const BlogDetailPage = () => {
           canonicalUrl={`/blog/${post.slug}`}
           ogImage={post.featured_image}
           ogType="article"
-          schemaData={generateStructuredData()}
         />
       )}
 
@@ -813,15 +781,7 @@ const BlogDetailPage = () => {
                 </Paper>
               </Box>
             )}
-
-          {/* Blog Content with ref to measure progress */}
-          <Box
-            ref={contentRef}
-            sx={{
-              flex: 1,
-              minHeight: "70vh", // Ensure there's enough content to scroll
-            }}
-          >
+          <Box ref={contentRef} sx={{ flex: 1 }}>
             {post && <BlogDetail post={post} loading={loading} />}
           </Box>
         </Box>

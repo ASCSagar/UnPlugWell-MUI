@@ -17,6 +17,10 @@ import {
   useTheme,
   useMediaQuery,
   Chip,
+  Divider,
+  alpha,
+  Paper,
+  Container,
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
@@ -35,6 +39,7 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const theme = useTheme();
+  const MotionPaper = motion(Paper);
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
@@ -157,17 +162,6 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
   const renderLoadingSkeletons = () => {
     return (
       <Box>
-        <Box sx={{ textAlign: "center", mb: 5 }}>
-          <Typography variant="h3" component="h1" gutterBottom>
-            {title || <Skeleton width="60%" sx={{ mx: "auto" }} />}
-          </Typography>
-          {subtitle && (
-            <Typography variant="subtitle1" color="text.secondary">
-              {subtitle || <Skeleton width="40%" sx={{ mx: "auto" }} />}
-            </Typography>
-          )}
-        </Box>
-
         {isMobile && renderCategoryChips()}
 
         <Grid container spacing={3}>
@@ -194,7 +188,7 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
                   <Skeleton width="80%" height={28} sx={{ mb: 0.5 }} />
                   <Skeleton width="60%" height={28} sx={{ mb: 1 }} />
                   <Skeleton width="90%" height={20} sx={{ mb: 0.5 }} />
-                  <Skeleton width="90%" height={20} />
+                  <Skeleton width="90%" height={20} sx={{ mb: 1 }} />
                 </Grid>
               ))}
             </Grid>
@@ -231,17 +225,62 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
   }
 
   return (
-    <Box sx={{ px: isMobile ? 2 : 0 }}>
-      <Box sx={{ textAlign: "center", mb: 5 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography variant="subtitle1" color="text.secondary">
-            {subtitle}
-          </Typography>
-        )}
-      </Box>
+    <Box
+      sx={{
+        pt: 8,
+        pb: 8,
+        bgcolor: alpha(theme.palette.primary.light, 0.05),
+      }}
+    >
+      <Container>
+        <MotionPaper
+          elevation={2}
+          sx={{
+            p: { xs: 3, md: 5 },
+            mb: 5,
+            borderRadius: 3,
+            background: `linear-gradient(135deg, ${alpha(
+              theme.palette.primary.light,
+              0.2
+            )}, ${alpha(theme.palette.background.paper, 0.9)})`,
+            position: "relative",
+            overflow: "hidden",
+          }}
+          initial="hidden"
+          animate="visible"
+        >
+          <Box>
+            <Typography
+              variant="h3"
+              component="h1"
+              align="center"
+              fontWeight={700}
+              sx={{
+                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                WebkitTextFillColor: "transparent",
+                mb: 2,
+              }}
+            >
+              {title}
+            </Typography>
+
+            <Divider
+              sx={{
+                width: "100px",
+                mx: "auto",
+                my: 3,
+                borderColor: alpha(theme.palette.primary.main, 0.3),
+              }}
+            />
+            <Typography align="center" sx={{ maxWidth: "700px", mx: "auto" }}>
+              {subtitle}
+            </Typography>
+          </Box>
+        </MotionPaper>
+      </Container>
 
       {isMobile && renderCategoryChips()}
 
