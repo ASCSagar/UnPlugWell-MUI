@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment";
+import { Blogs } from "../../types";
+import { motion } from "framer-motion";
+import { Link as RouterLink } from "react-router-dom";
 import {
-  Grid,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
   Typography,
   Box,
+  Avatar,
+  Grid,
   Skeleton,
   useTheme,
   useMediaQuery,
   Chip,
 } from "@mui/material";
-import axios from "axios";
-import BlogCard from "./BlogCard";
-import { motion } from "framer-motion";
-import { BlogPostSummary } from "../../types";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 
 interface BlogListProps {
   title?: string;
@@ -22,10 +29,10 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
+  const [blogs, setBlogs] = useState<Blogs[]>([]);
   const [categories, setCategories] = useState(["All"]);
+  const [filteredBlogs, setFilteredBlogs] = useState<Blogs[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [blogs, setBlogs] = useState<BlogPostSummary[]>([]);
-  const [filteredBlogs, setFilteredBlogs] = useState<BlogPostSummary[]>([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -119,7 +126,7 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
           gap: 1,
           mb: 3,
           justifyContent: "center",
-          px: 2, // Add padding on mobile
+          px: 2,
         }}
       >
         {categories.map((category, index) => (
@@ -177,13 +184,7 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
           <Grid item xs={12} md={9}>
             <Grid container spacing={3}>
               {Array.from(new Array(isMobile ? 4 : 6)).map((_, index) => (
-                <Grid 
-                  item 
-                  xs={12} 
-                  sm={isMobile ? 12 : 6} 
-                  md={4} 
-                  key={index}
-                >
+                <Grid item xs={12} sm={isMobile ? 12 : 6} md={4} key={index}>
                   <Skeleton
                     variant="rectangular"
                     width="100%"
@@ -278,7 +279,160 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
                     component={motion.div}
                     variants={itemVariants}
                   >
-                    <BlogCard post={blog} />
+                    <Card
+                      elevation={0}
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        borderRadius: 3,
+                        overflow: "hidden",
+                        border: "1px solid",
+                        borderColor: "divider",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-8px)",
+                          boxShadow: "0 12px 20px rgba(0, 0, 0, 0.1)",
+                          "& .card-image": {
+                            transform: "scale(1.05)",
+                          },
+                        },
+                      }}
+                    >
+                      <CardActionArea
+                        component={RouterLink}
+                        to={`/blog/${blog.slug}`}
+                        sx={{
+                          flexGrow: 1,
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "stretch",
+                        }}
+                      >
+                        <Box sx={{ position: "relative", overflow: "hidden" }}>
+                          <CardMedia
+                            component="img"
+                            className="card-image"
+                            image={blog.featured_image}
+                            alt={blog.image_alt}
+                            sx={{
+                              height: 200,
+                              transition: "transform 0.6s ease",
+                            }}
+                          />
+
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              top: 16,
+                              left: 16,
+                              bgcolor: "primary.main",
+                              color: "white",
+                              borderRadius: 1,
+                              py: 0.5,
+                              px: 1.5,
+                              fontSize: "0.75rem",
+                              fontWeight: 500,
+                              textTransform: "uppercase",
+                              letterSpacing: 0.5,
+                            }}
+                          >
+                            {blog.category.name}
+                          </Box>
+                        </Box>
+
+                        <CardContent
+                          sx={{
+                            flexGrow: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <Typography
+                            gutterBottom
+                            variant={"h6"}
+                            component="h2"
+                            sx={{
+                              fontWeight: 600,
+                              mb: 1,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: "vertical",
+                            }}
+                          >
+                            {blog.title}
+                          </Typography>
+
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                              mb: 2,
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 3,
+                              WebkitBoxOrient: "vertical",
+                              flexGrow: 1,
+                            }}
+                          >
+                            {blog.excerpt}
+                          </Typography>
+
+                          <Box
+                            sx={{
+                              mt: "auto",
+                              pt: 2,
+                              borderTop: "1px solid",
+                              borderColor: "divider",
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <Avatar
+                                src={`https://source.unsplash.com/random/100x100/?portrait&${blog.author.id}`}
+                                alt={blog.author.full_name}
+                                sx={{ width: 24, height: 24, mr: 1 }}
+                              />
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {blog.author.full_name}
+                              </Typography>
+                            </Box>
+
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                              <AccessTimeIcon
+                                sx={{
+                                  fontSize: 14,
+                                  mr: 0.5,
+                                  color: "text.secondary",
+                                }}
+                              />
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                              >
+                                {blog.estimated_reading_time} min read
+                              </Typography>
+                            </Box>
+                          </Box>
+
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ mt: 1 }}
+                          >
+                            {moment(blog.published_at).format("MMMM DD, YYYY")}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </Grid>
                 ))}
               </Grid>
@@ -289,15 +443,15 @@ const BlogList: React.FC<BlogListProps> = ({ title, subtitle }) => {
                     onClick={loadMore}
                     disabled={loading}
                     sx={{
-                      background: loading 
-                        ? "rgba(139, 92, 246, 0.5)" 
+                      background: loading
+                        ? "rgba(139, 92, 246, 0.5)"
                         : "linear-gradient(135deg, #8b5cf6, #c084fc)",
                       color: "white",
                       fontWeight: "bold",
                       cursor: loading ? "default" : "pointer",
                       "&:hover": {
-                        background: loading 
-                          ? "rgba(139, 92, 246, 0.5)" 
+                        background: loading
+                          ? "rgba(139, 92, 246, 0.5)"
                           : "linear-gradient(135deg, #7c3aed, #a855f7)",
                       },
                     }}

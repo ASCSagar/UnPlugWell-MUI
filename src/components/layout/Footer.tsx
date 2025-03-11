@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import axios from "axios";
 import {
   Box,
   Container,
@@ -38,9 +39,9 @@ const Footer = () => {
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
   const [subscribeError, setSubscribeError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   const currentYear = new Date().getFullYear();
@@ -49,7 +50,7 @@ const Footer = () => {
     setEmail(e.target.value);
   };
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -64,10 +65,29 @@ const Footer = () => {
       return;
     }
 
-    console.log(`Subscribing email: ${email}`);
-    setEmail("");
-    setSubscribeSuccess(true);
-    setSubscribeError(false);
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(
+        "https://unplugwell.com/blog/api/subscription/subscribe-create/",
+        { email, site: "2" }
+      );
+
+      if (response.status === 201) {
+        setSubscribeSuccess(true);
+        setEmail("");
+      } else {
+        setSubscribeError(true);
+        setErrorMessage(response.data.message || "Subscription failed");
+      }
+    } catch (error) {
+      setSubscribeError(true);
+      setErrorMessage(
+        error.response?.data?.message || "An error occurred. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCloseSnackbar = () => {
@@ -132,7 +152,7 @@ const Footer = () => {
       component="footer"
       sx={{
         position: "relative",
-        background: "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)",
+        background: "linear-gradient(90deg, #8b5cf6, #8b5cf6)",
         color: "#fff",
         mt: "auto",
         pt: { xs: 4, sm: 6, md: 8 },
@@ -347,12 +367,15 @@ const Footer = () => {
                     </InputAdornment>
                   ),
                 }}
+                error={subscribeError}
+                helperText={subscribeError ? errorMessage : ""}
               />
 
               <Button
                 type="submit"
                 variant="contained"
                 startIcon={<SendIcon />}
+                disabled={isLoading}
                 sx={{
                   backgroundColor: "white",
                   color: "primary.main",
@@ -365,7 +388,11 @@ const Footer = () => {
                   },
                 }}
               >
-                {isSmall ? "Subscribe" : "Subscribe Now"}
+                {isLoading
+                  ? "Subscribing..."
+                  : isSmall
+                  ? "Subscribe"
+                  : "Subscribe Now"}
               </Button>
             </Box>
 

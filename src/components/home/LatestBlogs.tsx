@@ -13,41 +13,40 @@ import { Link as RouterLink } from "react-router-dom";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { motion } from "framer-motion";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { fetchLatestPosts } from "../../services/api";
-import { BlogPostSummary } from "../../types";
+import axios from "axios";
+import { Blogs } from "../../types";
 import moment from "moment";
 
 interface LatestBlogsProps {
-  title?: string;
-  subtitle?: string;
-  limit?: number;
   showViewAllButton?: boolean;
 }
 
 const LatestBlogs: React.FC<LatestBlogsProps> = ({
-  title = "Latest Articles",
-  subtitle = "Discover our newest insights and strategies for digital wellbeing",
-  limit = 3,
   showViewAllButton = true,
 }) => {
-  const [posts, setPosts] = useState<BlogPostSummary[]>([]);
-  const [loading, setLoading] = useState(true);
   const theme = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<Blogs[]>([]);
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    const loadPosts = async () => {
-      setLoading(true);
-      const latestPosts = await fetchLatestPosts();
-      setPosts(latestPosts.slice(0, limit));
-      setLoading(false);
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get(
+          "https://unplugwell.com/blog/api/posts-latest/?site_domain=unplugwell.com"
+        );
+        setBlogs(response.data.results);
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    loadPosts();
-  }, [limit]);
+    fetchBlogs();
+  }, []);
 
-  // Animation variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -55,15 +54,6 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
       transition: {
         staggerChildren: 0.1,
       },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5 },
     },
   };
 
@@ -76,7 +66,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
           gutterBottom
           sx={{ fontWeight: 600 }}
         >
-          {title}
+          Latest Articles
         </Typography>
 
         <Typography
@@ -84,7 +74,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
           color="text.secondary"
           sx={{ maxWidth: 600, mx: "auto" }}
         >
-          {subtitle}
+          Discover our newest insights and strategies for digital wellbeing
         </Typography>
       </Box>
       <Grid
@@ -97,8 +87,8 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
         viewport={{ once: true, margin: "-100px" }}
       >
         {loading
-          ? Array.from(new Array(limit)).map((_, index) => (
-              <Grid item xs={12} sm={6} md={limit > 3 ? 3 : 4} key={index}>
+          ? Array.from(new Array(3)).map((_, index) => (
+              <Grid item xs={12} sm={6} md={3 > 3 ? 3 : 4} key={index}>
                 <Skeleton
                   variant="rectangular"
                   width="100%"
@@ -111,7 +101,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
                 <Skeleton width="90%" height={20} />
               </Grid>
             ))
-          : posts.map((post, index) => (
+          : blogs.map((post, index) => (
               <Grid
                 item
                 xs={12}
@@ -207,7 +197,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
                           fontWeight: 500,
                         }}
                       >
-                        {post.category.name || post.category.slug}
+                        {post.category.name}
                       </Typography>
 
                       <Typography variant="caption" color="text.secondary">

@@ -1,21 +1,15 @@
 import React from "react";
-import { Box, Typography, Grid, Button, useTheme } from "@mui/material";
-import { motion } from "framer-motion";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import ExploreIcon from "@mui/icons-material/Explore";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link as RouterLink } from "react-router-dom";
+import { motion } from "framer-motion";
 import LatestBlogs from "./LatestBlogs";
 import PopularBlogs from "./PopularBlogs";
+import ExploreIcon from "@mui/icons-material/Explore";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import { Box, Typography, Grid, Button } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-interface FeaturedContentProps {
-  isMobile?: boolean;
-}
-
-const FeaturedContent = ({ isMobile }: FeaturedContentProps) => {
-  const theme = useTheme();
-
+const FeaturedContent = () => {
   const fadeInUp = {
     hidden: { opacity: 0, y: 40 },
     visible: {
@@ -42,19 +36,13 @@ const FeaturedContent = ({ isMobile }: FeaturedContentProps) => {
         <Grid item xs={12}>
           <Box
             sx={{
-              bgcolor:
-                theme.palette.mode === "dark"
-                  ? "rgba(30, 41, 59, 0.8)"
-                  : "rgba(255, 255, 255, 0.8)",
+              bgcolor: "rgba(255, 255, 255, 0.8)",
               borderRadius: 4,
               p: 4,
               mb: 4,
               backdropFilter: "blur(10px)",
               border: "1px solid",
-              borderColor:
-                theme.palette.mode === "dark"
-                  ? "rgba(99, 102, 241, 0.2)"
-                  : "rgba(99, 102, 241, 0.2)",
+              borderColor: "rgba(99, 102, 241, 0.2)",
               boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)",
             }}
           >
@@ -107,100 +95,107 @@ const FeaturedContent = ({ isMobile }: FeaturedContentProps) => {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <BlogSection
-            to="/blog"
-            title="Latest Insights"
-            icon={<TrendingUpIcon sx={{ color: "#6366f1", mr: 1.5 }} />}
-            component={<LatestBlogs title="" subtitle="" limit={3} />}
-          />
+          <Box
+            component={motion.div}
+            variants={fadeInUp}
+            sx={{
+              height: "100%",
+              bgcolor: "rgba(255, 255, 255, 0.7)",
+              borderRadius: 4,
+              backdropFilter: "blur(10px)",
+              border: "1px solid",
+              borderColor: "rgba(99, 102, 241, 0.2)",
+              overflow: "hidden",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.05)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                p: 3,
+                borderBottom: "1px solid",
+                borderColor: "rgba(0, 0, 0, 0.05)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <TrendingUpIcon sx={{ color: "#6366f1", mr: 1.5 }} />
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Latest Insights
+                </Typography>
+              </Box>
+              <Button
+                component={RouterLink}
+                to={"/blog"}
+                variant="text"
+                color="primary"
+                endIcon={<ArrowForwardIcon />}
+                sx={{ fontWeight: 600 }}
+              >
+                View All
+              </Button>
+            </Box>
+
+            <Box sx={{ p: 3, flexGrow: 1 }}>
+              <LatestBlogs />
+            </Box>
+          </Box>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <BlogSection
-            to="/blog"
-            title="Popular Content"
-            icon={<ExploreIcon sx={{ color: "#ec4899", mr: 1.5 }} />}
-            component={<PopularBlogs title="" subtitle="" limit={3} />}
-          />
+          <Box
+            component={motion.div}
+            variants={fadeInUp}
+            sx={{
+              height: "100%",
+              bgcolor: "rgba(255, 255, 255, 0.7)",
+              borderRadius: 4,
+              backdropFilter: "blur(10px)",
+              border: "1px solid",
+              borderColor: "rgba(99, 102, 241, 0.2)",
+              overflow: "hidden",
+              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.05)",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Box
+              sx={{
+                p: 3,
+                borderBottom: "1px solid",
+                borderColor: "rgba(0, 0, 0, 0.05)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <ExploreIcon sx={{ color: "#ec4899", mr: 1.5 }} />
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  Popular Content
+                </Typography>
+              </Box>
+              <Button
+                component={RouterLink}
+                to={"/blog"}
+                variant="text"
+                color="primary"
+                endIcon={<ArrowForwardIcon />}
+                sx={{ fontWeight: 600 }}
+              >
+                View All
+              </Button>
+            </Box>
+
+            <Box sx={{ p: 3, flexGrow: 1 }}>
+              <PopularBlogs />
+            </Box>
+          </Box>
         </Grid>
       </Grid>
-    </Box>
-  );
-};
-
-interface BlogSectionProps {
-  icon: React.ReactNode;
-  title: string;
-  to: string;
-  component: React.ReactNode;
-}
-
-const BlogSection = ({ icon, title, to, component }: BlogSectionProps) => {
-  const theme = useTheme();
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" },
-    },
-  };
-
-  return (
-    <Box
-      component={motion.div}
-      variants={fadeInUp}
-      sx={{
-        height: "100%",
-        bgcolor:
-          theme.palette.mode === "dark"
-            ? "rgba(30, 41, 59, 0.7)"
-            : "rgba(255, 255, 255, 0.7)",
-        borderRadius: 4,
-        backdropFilter: "blur(10px)",
-        border: "1px solid",
-        borderColor:
-          theme.palette.mode === "dark"
-            ? "rgba(99, 102, 241, 0.2)"
-            : "rgba(99, 102, 241, 0.2)",
-        overflow: "hidden",
-        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.05)",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <Box
-        sx={{
-          p: 3,
-          borderBottom: "1px solid",
-          borderColor:
-            theme.palette.mode === "dark"
-              ? "rgba(255, 255, 255, 0.1)"
-              : "rgba(0, 0, 0, 0.05)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {icon}
-          <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            {title}
-          </Typography>
-        </Box>
-        <Button
-          component={RouterLink}
-          to={to}
-          variant="text"
-          color="primary"
-          endIcon={<ArrowForwardIcon />}
-          sx={{ fontWeight: 600 }}
-        >
-          View All
-        </Button>
-      </Box>
-
-      <Box sx={{ p: 3, flexGrow: 1 }}>{component}</Box>
     </Box>
   );
 };

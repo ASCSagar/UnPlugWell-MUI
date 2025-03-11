@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { Blogs } from "../types";
+import { motion } from "framer-motion";
+import Seo from "../components/layout/Seo";
 import { useParams } from "react-router-dom";
+import Layout from "../components/layout/Layout";
+import BlogDetail from "../components/blog/BlogDetail";
 import {
   Box,
   Container,
@@ -23,33 +29,27 @@ import {
   InputLabel,
   SelectChangeEvent,
 } from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import PauseIcon from "@mui/icons-material/Pause";
-import HeadsetIcon from "@mui/icons-material/Headset";
-import SpeedIcon from "@mui/icons-material/Speed";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import StopIcon from "@mui/icons-material/Stop";
+import PauseIcon from "@mui/icons-material/Pause";
+import SpeedIcon from "@mui/icons-material/Speed";
+import HeadsetIcon from "@mui/icons-material/Headset";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import { motion } from "framer-motion";
-import Layout from "../components/layout/Layout";
-import Seo from "../components/layout/Seo";
-import BlogDetail from "../components/blog/BlogDetail";
-import { fetchPostBySlug } from "../services/api";
-import { BlogPost } from "../types";
 
 interface SpeechSection {
   id: string;
   title: string;
   text: string;
-  level: number; 
+  level: number;
   element?: HTMLElement;
 }
 
 const BlogDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPost | null>(null);
+  const [post, setPost] = useState<Blogs>();
   const [loading, setLoading] = useState(true);
   const [readingProgress, setReadingProgress] = useState(0);
   const [tableOfContents, setTableOfContents] = useState<
@@ -106,29 +106,41 @@ const BlogDetailPage = () => {
     };
   }, []);
 
-  // Load post data
   useEffect(() => {
-    const loadPost = async () => {
-      setLoading(true);
-      if (slug) {
-        const postData = await fetchPostBySlug(slug);
-        setPost(postData);
+    const fetchPost = async () => {
+      if (!slug) return;
 
-        // Wait for DOM to update after post is loaded
+      setLoading(true);
+      try {
+        // Fetch post data from the API
+        const response = await axios.get(`https://unplugwell.com/blog/api/post/${slug}/`);
+        setPost(response.data);
+
+        // Wait for the DOM to update after the post is loaded
         setTimeout(() => {
           extractTableOfContents();
           extractSpeechSections();
         }, 800);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    loadPost();
+    fetchPost();
+
     // Reset speech state when slug changes
     handleStop();
 
     // Scroll to top when slug changes
     window.scrollTo({ top: 0, behavior: "smooth" });
+
+    // Cleanup function to reset state if the component unmounts or slug changes
+    return () => {
+      setPost({} as Blogs);
+      setLoading(false);
+    };
   }, [slug]);
 
   // Extract headings for table of contents
@@ -468,7 +480,6 @@ const BlogDetailPage = () => {
         />
       )}
 
-      {/* Progress bar - fixed at top */}
       <Box
         sx={{
           position: "fixed",
@@ -532,16 +543,10 @@ const BlogDetailPage = () => {
             zIndex: 1000,
             p: 2,
             borderRadius: 2,
-            bgcolor:
-              theme.palette.mode === "dark"
-                ? "rgba(30, 41, 59, 0.9)"
-                : "rgba(255, 255, 255, 0.9)",
+            bgcolor: "rgba(255, 255, 255, 0.9)",
             backdropFilter: "blur(10px)",
             border: "1px solid",
-            borderColor:
-              theme.palette.mode === "dark"
-                ? "rgba(99, 102, 241, 0.2)"
-                : "rgba(99, 102, 241, 0.2)",
+            borderColor: "rgba(99, 102, 241, 0.2)",
             boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
           }}
         >
@@ -707,16 +712,10 @@ const BlogDetailPage = () => {
                     top: 100,
                     p: 3,
                     borderRadius: 2,
-                    bgcolor:
-                      theme.palette.mode === "dark"
-                        ? "rgba(30, 41, 59, 0.8)"
-                        : "rgba(255, 255, 255, 0.8)",
+                    bgcolor: "rgba(255, 255, 255, 0.8)",
                     backdropFilter: "blur(10px)",
                     border: "1px solid",
-                    borderColor:
-                      theme.palette.mode === "dark"
-                        ? "rgba(99, 102, 241, 0.2)"
-                        : "rgba(99, 102, 241, 0.2)",
+                    borderColor: "rgba(99, 102, 241, 0.2)",
                   }}
                 >
                   <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
@@ -732,10 +731,7 @@ const BlogDetailPage = () => {
                           borderRadius: 1,
                           mb: 0.5,
                           "&:hover": {
-                            bgcolor:
-                              theme.palette.mode === "dark"
-                                ? "rgba(255, 255, 255, 0.05)"
-                                : "rgba(0, 0, 0, 0.04)",
+                            bgcolor: "rgba(0, 0, 0, 0.04)",
                           },
                         }}
                       >
@@ -793,10 +789,7 @@ const BlogDetailPage = () => {
                       mt: 2,
                       pt: 2,
                       borderTop: "1px solid",
-                      borderColor:
-                        theme.palette.mode === "dark"
-                          ? "rgba(255, 255, 255, 0.1)"
-                          : "rgba(0, 0, 0, 0.1)",
+                      borderColor: "rgba(0, 0, 0, 0.1)",
                     }}
                   >
                     <Typography variant="caption" color="text.secondary">
@@ -809,10 +802,7 @@ const BlogDetailPage = () => {
                         mt: 1,
                         height: 6,
                         borderRadius: 3,
-                        bgcolor:
-                          theme.palette.mode === "dark"
-                            ? "rgba(255, 255, 255, 0.05)"
-                            : "rgba(0, 0, 0, 0.05)",
+                        bgcolor: "rgba(0, 0, 0, 0.05)",
                         "& .MuiLinearProgress-bar": {
                           bgcolor: "#6366f1",
                           borderRadius: 3,

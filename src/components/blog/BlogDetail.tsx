@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { motion } from "framer-motion";
-import { BlogPost } from "../../types";
+import { Blogs } from "../../types";
 import LoadingSpinner from "../common/LoadingSpinner";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -24,7 +24,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 
 interface BlogDetailProps {
-  post: BlogPost;
+  post: Blogs;
   loading: boolean;
 }
 
