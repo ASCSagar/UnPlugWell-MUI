@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { motion } from "framer-motion";
+import Seo from "../components/layout/Seo";
+import Layout from "../components/layout/Layout";
 import {
   Box,
   Typography,
@@ -9,12 +13,9 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { motion } from "framer-motion";
 import SendIcon from "@mui/icons-material/Send";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Layout from "../components/layout/Layout";
-import Seo from "../components/layout/Seo";
 
 const ContactPage = () => {
   const [formState, setFormState] = useState({
@@ -25,59 +26,89 @@ const ContactPage = () => {
   });
 
   const [errors, setErrors] = useState({
-    name: false,
-    email: false,
-    message: false,
+    name: "",
+    email: "",
+    message: "",
   });
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear error when user types
-    if (errors[name as keyof typeof errors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: false,
-      }));
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
   const validateForm = () => {
-    const newErrors = {
-      name: formState.name.trim() === "",
-      email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email),
-      message: formState.message.trim() === "",
-    };
+    let isValid = true;
+    const newErrors = { name: "", email: "", message: "" };
+
+    if (!formState.name.trim()) {
+      newErrors.name = "Name is required";
+      isValid = false;
+    }
+
+    if (!formState.email.trim()) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
+      newErrors.email = "Invalid email address";
+      isValid = false;
+    }
+
+    if (!formState.message.trim()) {
+      newErrors.message = "Message is required";
+      isValid = false;
+    }
 
     setErrors(newErrors);
-    return !Object.values(newErrors).some(Boolean);
+    return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+    // Clear the error for the field being edited
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      // Here you would typically send the form data to your backend
-      console.log("Form submitted:", formState);
-
-      // Simulate successful submission
-      setFormSubmitted(true);
-      setFormState({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-      });
+    if (!validateForm()) {
+      return;
     }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "https://unplugwell.com/blog/api/message/message/",
+        { ...formState, site: "2" }
+      );
+      if (response.status === 201) {
+        setSnackbarMessage("Message sent successfully!");
+        setSnackbarSeverity("success");
+        setFormState({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      }
+    } catch (error) {
+      setSnackbarMessage("Failed to send message. Please try again.");
+      setSnackbarSeverity("error");
+    } finally {
+      setLoading(false);
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -87,7 +118,6 @@ const ContactPage = () => {
         description="Have questions about digital detox or need assistance? Contact UnplugWell today. We’re here to help you unplug and thrive in a hyper-connected world."
         canonicalUrl="/contact"
       />
-
       <Box
         component={motion.div}
         initial={{ opacity: 0 }}
@@ -196,9 +226,8 @@ const ContactPage = () => {
                     value={formState.name}
                     onChange={handleChange}
                     fullWidth
-                    required
-                    error={errors.name}
-                    helperText={errors.name ? "Name is required" : ""}
+                    error={!!errors.name}
+                    helperText={errors.name}
                   />
                 </Grid>
 
@@ -210,9 +239,8 @@ const ContactPage = () => {
                     value={formState.email}
                     onChange={handleChange}
                     fullWidth
-                    required
-                    error={errors.email}
-                    helperText={errors.email ? "Valid email is required" : ""}
+                    error={!!errors.email}
+                    helperText={errors.email}
                   />
                 </Grid>
 
@@ -230,14 +258,13 @@ const ContactPage = () => {
                   <TextField
                     label="Your Message"
                     name="message"
-                    multiline
-                    rows={5}
                     value={formState.message}
                     onChange={handleChange}
+                    multiline
+                    rows={5}
                     fullWidth
-                    required
-                    error={errors.message}
-                    helperText={errors.message ? "Message is required" : ""}
+                    error={!!errors.message}
+                    helperText={errors.message}
                   />
                 </Grid>
 
@@ -248,50 +275,32 @@ const ContactPage = () => {
                     color="primary"
                     size="large"
                     endIcon={<SendIcon />}
+                    disabled={loading}
                     sx={{
                       px: 4,
                       py: 1.5,
                       borderRadius: 2,
                     }}
                   >
-                    Send Message
+                    {loading ? "Sending..." : "Send Message"}
                   </Button>
                 </Grid>
               </Grid>
             </Paper>
           </Grid>
         </Grid>
-
-        <Snackbar
-          open={formSubmitted}
-          autoHideDuration={6000}
-          onClose={() => setFormSubmitted(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setFormSubmitted(false)}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
-            Thank you for your message! We'll get back to you soon.
-          </Alert>
-        </Snackbar>
-
-        <Snackbar
-          open={submitError}
-          autoHideDuration={6000}
-          onClose={() => setSubmitError(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        >
-          <Alert
-            onClose={() => setSubmitError(false)}
-            severity="error"
-            sx={{ width: "100%" }}
-          >
-            There was an error sending your message. Please try again.
-          </Alert>
-        </Snackbar>
       </Box>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Layout>
   );
 };

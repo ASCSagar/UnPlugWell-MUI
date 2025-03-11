@@ -46,7 +46,7 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "calc(100vh - 200px)", // Account for header and footer
+          minHeight: "calc(100vh - 200px)",
         }}
       >
         {content}

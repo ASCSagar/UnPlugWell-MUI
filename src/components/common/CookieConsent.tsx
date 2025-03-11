@@ -89,15 +89,9 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
               p: { xs: 2, sm: 3 },
               borderRadius: 3,
               backdropFilter: "blur(10px)",
-              background: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "rgba(15, 23, 42, 0.95)"
-                  : "rgba(255, 255, 255, 0.95)",
+              background: "rgba(255, 255, 255, 0.95)",
               border: "1px solid",
-              borderColor: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "rgba(99, 102, 241, 0.2)"
-                  : "rgba(99, 102, 241, 0.2)",
+              borderColor: "rgba(99, 102, 241, 0.2)",
               boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)",
             }}
           >

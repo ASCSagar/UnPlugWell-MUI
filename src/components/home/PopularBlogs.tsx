@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment";
+import { motion } from "framer-motion";
+import { Blogs } from "../../types";
+import { Link as RouterLink } from "react-router-dom";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import {
   Box,
   Typography,
@@ -8,39 +14,29 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
-import { motion } from "framer-motion";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import { fetchPopularPosts } from "../../services/api";
-import { BlogPostSummary } from "../../types";
-import moment from "moment";
 
-interface PopularBlogsProps {
-  title?: string;
-  subtitle?: string;
-  limit?: number;
-}
-
-const PopularBlogs: React.FC<PopularBlogsProps> = ({
-  title = "Popular Articles",
-  subtitle = "Our most-read content on digital wellness and mindful technology use",
-  limit = 3,
-}) => {
-  const [posts, setPosts] = useState<BlogPostSummary[]>([]);
-  const [loading, setLoading] = useState(true);
+const PopularBlogs = () => {
   const theme = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<Blogs[]>([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useEffect(() => {
-    const loadPosts = async () => {
-      setLoading(true);
-      const popularPosts = await fetchPopularPosts();
-      setPosts(popularPosts.slice(0, limit));
-      setLoading(false);
+    const fetchPopularBlogs = async () => {
+      try {
+        const response = await axios.get(
+          "https://unplugwell.com/blog/api/posts-popular/?site_domain=unplugwell.com"
+        );
+        setBlogs(response.data.results);
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    loadPosts();
-  }, [limit]);
+    fetchPopularBlogs();
+  }, []);
 
   return (
     <Box>
@@ -51,7 +47,7 @@ const PopularBlogs: React.FC<PopularBlogsProps> = ({
           gutterBottom
           sx={{ fontWeight: 600 }}
         >
-          {title}
+          Popular Articles
         </Typography>
 
         <Typography
@@ -59,12 +55,12 @@ const PopularBlogs: React.FC<PopularBlogsProps> = ({
           color="text.secondary"
           sx={{ maxWidth: 600, mx: "auto" }}
         >
-          {subtitle}
+          Our most-read content on digital wellness and mindful technology use
         </Typography>
       </Box>
       <Grid container spacing={3}>
         {loading
-          ? Array.from(new Array(limit)).map((_, index) => (
+          ? Array.from(new Array(3)).map((_, index) => (
               <Grid item xs={12} key={index}>
                 <Skeleton
                   variant="rectangular"
@@ -74,7 +70,7 @@ const PopularBlogs: React.FC<PopularBlogsProps> = ({
                 />
               </Grid>
             ))
-          : posts.map((post, index) => (
+          : blogs.map((post, index) => (
               <Grid
                 item
                 xs={12}
@@ -170,7 +166,7 @@ const PopularBlogs: React.FC<PopularBlogsProps> = ({
                           fontWeight: 500,
                         }}
                       >
-                        {post.category.name || post.category.slug}
+                        {post.category.name}
                       </Typography>
 
                       <Typography variant="caption" color="text.secondary">
