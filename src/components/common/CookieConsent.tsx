@@ -15,27 +15,26 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface CookieConsentProps {
   cookieName?: string;
-  cookieValue?: string;
-  cookieExpiration?: number; // days
+  acceptedCookieValue?: string;
+  rejectedCookieValue?: string;
+  cookieExpiration?: number;
 }
 
 const CookieConsent: React.FC<CookieConsentProps> = ({
   cookieName = "cookie_consent",
-  cookieValue = "accepted",
-  cookieExpiration = 365, // 1 year by default
+  acceptedCookieValue = "accepted",
+  rejectedCookieValue = "rejected",
+  cookieExpiration = 365,
 }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    // Check if user has already consented
-    const hasConsented = getCookie(cookieName) === cookieValue;
+    const hasConsented = getCookie(cookieName);
     if (!hasConsented) {
-      // Show consent banner if no consent found
       setOpen(true);
     }
-  }, [cookieName, cookieValue]);
+  }, [cookieName]);
 
-  // Get cookie by name
   const getCookie = (name: string): string | null => {
     const match = document.cookie.match(
       new RegExp("(^| )" + name + "=([^;]+)")
@@ -43,7 +42,6 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
     return match ? match[2] : null;
   };
 
-  // Set cookie with name, value and expiration
   const setCookie = (name: string, value: string, days: number): void => {
     const date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -51,18 +49,18 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
   };
 
-  const handleAccept = () => {
-    // Set consent cookie
-    setCookie(cookieName, cookieValue, cookieExpiration);
+  const handleAcceptAll = () => {
+    setCookie(cookieName, acceptedCookieValue, cookieExpiration);
     setOpen(false);
-
-    // Optional: Add analytics initialization here if needed
-    // For example, you might initialize Google Analytics here
   };
 
-  const handleClose = () => {
-    // Set cookie for dismissed state but not full consent
-    setCookie("cookie_dismissed", "true", 7); // Shorter expiration for dismissed
+  const handleRejectAll = () => {
+    setCookie(cookieName, rejectedCookieValue, cookieExpiration);
+    setOpen(false);
+  };
+
+  const handleNecessaryOnly = () => {
+    setCookie(cookieName, rejectedCookieValue, cookieExpiration);
     setOpen(false);
   };
 
@@ -152,7 +150,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
               >
                 <Button
                   variant="outlined"
-                  onClick={handleClose}
+                  onClick={handleNecessaryOnly}
                   fullWidth
                   sx={{
                     borderColor: "#6366f1",
@@ -168,8 +166,25 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
                 </Button>
 
                 <Button
+                  variant="outlined"
+                  onClick={handleRejectAll}
+                  fullWidth
+                  sx={{
+                    borderColor: "#6366f1",
+                    color: "#6366f1",
+                    fontWeight: 500,
+                    "&:hover": {
+                      borderColor: "#4f46e5",
+                      backgroundColor: "rgba(99, 102, 241, 0.05)",
+                    },
+                  }}
+                >
+                  Reject All
+                </Button>
+
+                <Button
                   variant="contained"
-                  onClick={handleAccept}
+                  onClick={handleAcceptAll}
                   fullWidth
                   sx={{
                     bgcolor: "#6366f1",
@@ -189,7 +204,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
             <IconButton
               size="small"
               aria-label="close"
-              onClick={handleClose}
+              onClick={handleNecessaryOnly}
               sx={{
                 position: "absolute",
                 right: 8,
