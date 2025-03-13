@@ -279,7 +279,7 @@ const Home = () => {
                   <Box sx={{ mt: "auto" }}>
                     <Button
                       component={RouterLink}
-                      to="/blog"
+                      to="/blogs"
                       endIcon={<ArrowForwardIcon />}
                       sx={{
                         textTransform: "none",
@@ -389,7 +389,7 @@ const Home = () => {
 
                   <Button
                     component={RouterLink}
-                    to="/blog"
+                    to="/blogs"
                     variant="contained"
                     color="primary"
                     endIcon={<ArrowForwardIcon />}

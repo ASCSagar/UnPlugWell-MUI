@@ -251,7 +251,7 @@ const LatestBlogs: React.FC<LatestBlogsProps> = ({
         <Box sx={{ textAlign: "center", mt: 5 }}>
           <Button
             component={RouterLink}
-            to="/blog"
+            to="/blogs"
             endIcon={<ArrowForwardIcon />}
             variant="outlined"
             color="primary"

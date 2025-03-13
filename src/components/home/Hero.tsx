@@ -230,7 +230,7 @@ const Hero = () => {
               >
                 <Button
                   component={RouterLink}
-                  to="/blog"
+                  to="/blogs"
                   variant="contained"
                   size="large"
                   endIcon={<ArrowForwardIcon />}

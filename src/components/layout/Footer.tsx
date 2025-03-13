@@ -119,7 +119,7 @@ const Footer = () => {
 
   const quickLinks = [
     { text: "Home", url: "/" },
-    { text: "Blog", url: "/blog" },
+    { text: "Blog", url: "/blogs" },
     { text: "About Us", url: "/about" },
     { text: "Contact", url: "/contact" },
   ];

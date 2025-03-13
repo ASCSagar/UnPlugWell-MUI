@@ -8,21 +8,21 @@ import {
   Container,
   Button,
   Avatar,
+  Skeleton,
 } from "@mui/material";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { Blogs } from "../../types";
-import LoadingSpinner from "../common/LoadingSpinner";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import RelatedBlog from "./RelatedBlog";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import RelatedBlog from "./RelatedBlog";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 interface BlogDetailProps {
   post: Blogs;
@@ -50,7 +50,37 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
   };
 
   if (loading) {
-    return <LoadingSpinner fullPage message="Loading article..." />;
+    return (
+      <Box
+        sx={{
+          background:
+            "linear-gradient(to right, rgba(238, 242, 255, 0.3), rgba(254, 242, 254, 0.3))",
+          px: { xs: 2, md: 3, lg: 4 },
+          py: 6,
+        }}
+      >
+        <Container>
+          <Grid container spacing={4}>
+            <Grid item xs={12} lg={8}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Skeleton variant="rectangular" width="100%" height={40} />
+                <Skeleton variant="rectangular" width="80%" height={30} />
+                <Skeleton variant="rectangular" width="60%" height={20} />
+                <Skeleton variant="rectangular" width="100%" height={300} />
+                <Skeleton variant="rectangular" width="100%" height={200} />
+              </Box>
+            </Grid>
+            <Grid item xs={12} lg={4}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Skeleton variant="rectangular" width="100%" height={100} />
+                <Skeleton variant="rectangular" width="100%" height={100} />
+                <Skeleton variant="rectangular" width="100%" height={100} />
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    );
   }
 
   return (
@@ -170,31 +200,7 @@ const BlogDetail: React.FC<BlogDetailProps> = ({ post, loading }) => {
                       borderTop: "1px solid",
                       borderColor: "divider",
                     }}
-                  >
-                    <Box
-                      sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
-                    >
-                      <Avatar
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          background:
-                            "linear-gradient(to bottom right, #4f46e5, #e11d48)",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {post.author.full_name.charAt(0)}
-                      </Avatar>
-                      <Box>
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          {post.author.full_name}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Author & Content Creator
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
+                  />
                 </Box>
               </motion.div>
               {post.featured_image && (

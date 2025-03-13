@@ -23,7 +23,7 @@ const App = () => {
         <CssBaseline />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blogs" element={<BlogPage />} />
           <Route path="/blog/:slug" element={<BlogDetailPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
