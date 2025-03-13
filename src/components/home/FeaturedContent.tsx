@@ -129,7 +129,7 @@ const FeaturedContent = () => {
               </Box>
               <Button
                 component={RouterLink}
-                to={"/blog"}
+                to={"/blogs"}
                 variant="text"
                 color="primary"
                 endIcon={<ArrowForwardIcon />}
@@ -180,7 +180,7 @@ const FeaturedContent = () => {
               </Box>
               <Button
                 component={RouterLink}
-                to={"/blog"}
+                to={"/blogs"}
                 variant="text"
                 color="primary"
                 endIcon={<ArrowForwardIcon />}

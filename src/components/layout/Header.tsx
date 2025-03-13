@@ -20,7 +20,7 @@ import UnplugWell from "../../assets/unplugwellOne.png";
 
 const navItems = [
   { name: "Home", path: "/" },
-  { name: "Blog", path: "/blog" },
+  { name: "Blog", path: "/blogs" },
   { name: "About", path: "/about" },
   { name: "Contact", path: "/contact" },
 ];
